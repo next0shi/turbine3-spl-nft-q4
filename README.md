@@ -117,7 +117,7 @@ A wallet does not hold tokens directly. It holds them in an **associated token a
 npm run spl:transfer
 ```
 
-The script derives the recipient's ATA for the same mint, creates it (I pay the rent), and sends a `transferChecked` instruction. `transferChecked` also verifies the decimals, which prevents amount mistakes.
+The script derives the recipient's ATA for the same mint, creates it (I pay the rent), and sends a `transferChecked` instruction. `transferChecked` also verifies the decimals, which prevents amount mismatch and protects the transfer.
 
 - Recipient wallet: `6wtWRkNJhg6yBfXoejxBoKj984GNv4GwqEUgTV4SHKTC`
 - Recipient token account: `F1a8exUK3d44PoPLdz47UAs1TJciDtrKDknudEqxgB9F`
@@ -203,15 +203,15 @@ The script fetches the asset with `fetchAsset`, prints its current name and URI,
 - Update transaction: `4zkhrZMp78PvYqYwRvw4zXyBWvaZ6dMkmPpwadTXGq1MkMGxRovXB3DabnwEAAdQtih5FiWCXYKxJSSLQnDZGtdU`
 - Metaplex explorer: https://core.metaplex.com/explorer/AXwDvXi75pdpa15oESRFeoTPdqCCSzg9AdRyx9NPRSGV?env=devnet
 
+![NFT after the update](./Screenshot%20from%202026-10-31%2022-09-07.png)
 
-![NFT after the update](./Screenshot from 2026-10-31 22-09-07.png)
 ---
 
 ## Problems I Ran Into
 
-- **`npm audit fix --force` broke the dependencies.** The audit warnings come from deep transitive dependencies and are not an issue for local devnet scripts. I restored the project with `git checkout package.json package-lock.json`, deleted `node_modules` and reinstalled. I no longer run `audit fix`.
+- **`npm audit fix --force` broke the dependencies.** The audit warnings come from deep transitive dependencies and are not an issue for local devnet scripts. I restored the project with `git checkout ...` to bring it back to a known-good state.
 - **Metaplex explorers show the name from the metadata JSON.** Changing only the on-chain name did not change what the explorer displayed, so the new name also had to go into a newly uploaded JSON.
-- **Library versions differ from older examples.** `getCreateAssociatedTokenIdempotentInstructionAsync` did not exist in my installed `@solana-program/token`, so I used `getCreateAssociatedTokenInstructionAsync`. That version fails if the account already exists, so it is removed from the instruction list on a rerun.
+- **Library versions differ from older examples.** `getCreateAssociatedTokenIdempotentInstructionAsync` did not exist in my installed `@solana-program/token`, so I used `getCreateAssociatedTokenInstructionAsync` instead.
 
 ## What I Learned
 
