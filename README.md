@@ -204,7 +204,6 @@ The script fetches the asset with `fetchAsset`, prints its current name and URI,
 - Metaplex explorer: https://core.metaplex.com/explorer/AXwDvXi75pdpa15oESRFeoTPdqCCSzg9AdRyx9NPRSGV?env=devnet
 
 ![NFT after the update](./Screenshot%20from%202026-10-31%2022-09-07.png)
-
 ---
 
 ## Problems I Ran Into
