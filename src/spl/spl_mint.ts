@@ -1,6 +1,5 @@
 import {
   address,
-  appendTransactionMessageInstruction,
   appendTransactionMessageInstructions,
   assertIsTransactionWithBlockhashLifetime,
   createKeyPairSignerFromBytes,
@@ -45,20 +44,19 @@ const mint = address("BBYzwixyjw2bYydxQe7dqmH3HsSRusPzU39oNYScCmUp");
       tokenProgram: TOKEN_PROGRAM_ADDRESS,
     });
 
-    // 1. Create the token account (does nothing if it already exists)
-    const createAtaIx =
-      await getCreateAssociatedTokenIdempotentInstructionAsync({
-        payer: keypairSigner,
-        mint,
-        owner: keypairSigner.address,
-      });
+    // 1. Create the token account (fails if it already exists; on a rerun, remove createAtaIx from the instruction list below)
+    const createAtaIx = await getCreateAssociatedTokenInstructionAsync({
+      payer: keypairSigner,
+      mint,
+      owner: keypairSigner.address,
+    });
 
     // 2. Mint tokens into it
     const mintToIx = getMintToInstruction({
       mint,
       token: ata,
       mintAuthority: keypairSigner,
-      amount: 100_000_000n, // 100 tokens at 6 decimals
+      amount: 100n * token_decimals, // 100 tokens at 6 decimals
     });
 
     // Build, sign and send, same pattern as spl_init.ts
