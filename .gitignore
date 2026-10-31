@@ -12,4 +12,5 @@ node_modules/
 devnet-wallet.json
 images-cat.jpeg
 
-wallet.json
+wallet.jsondevnet-wallet.json
+node_modules
