@@ -93,8 +93,5 @@ const rpcSubscriptions = createSolanaRpcSubscriptions(
     console.log("Signature:", getSignatureFromTransaction(signedTx));
   } catch (error) {
     console.log(error);
-    import { writeFileSync } from "fs";
-    // ...after the console.log lines
-    writeFileSync("mint-address.txt", mint.address);
   }
 })();
