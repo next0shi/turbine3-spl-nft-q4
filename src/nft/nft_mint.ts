@@ -22,16 +22,23 @@ umi.use(mplCore());
 (async () => {
   try {
     const metadataUri =
-      "https://gateway.irys.xyz/BihKZnhMCvxN3i34cv25eEyFgUvBVGJQn1Gp11D4LxEi ";
+      "https://gateway.irys.xyz/3oHrJVpunRamRRF7vk4LssF9ztzEp5Tie9kEYuxGYD25";
     const asset = generateSigner(umi);
 
     //add you nft name and metadata uri
-    // const tx = await create()
+    const tx = await create(umi, {
+      asset,
+      name: "my path, my burden",
+      uri: metadataUri,
+    }).sendAndConfirm(umi);
 
-    // const signature = base58.deserialize(tx.signature)[0];
+    const signature = base58.deserialize(tx.signature)[0];
 
-    // console.log(`signature ${signature} , asset : ${asset.publicKey}`);
+    console.log(`signature ${signature} , asset : ${asset.publicKey}`);
+    console.log(
+      `https://core.metaplex.com/explorer/${asset.publicKey}?env=devnet`,
+    );
   } catch (e) {
-    console.log(`errior ${e}`);
+    console.log(`error ${e}`);
   }
 })();
