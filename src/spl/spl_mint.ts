@@ -30,52 +30,66 @@ const rpcSubscriptions = createSolanaRpcSubscriptions(
 const token_decimals = 1_000_000n;
 
 //paste your mint address got from spl_init.ts
-const mint = address("E2Jazz2VXcVL9RZkn6ZFA4q1YGvgEvrns3Gr6w72DC4w");
+const mint = address("BBYzwixyjw2bYydxQe7dqmH3HsSRusPzU39oNYScCmUp");
 
 (async () => {
   try {
-    const signer = await createKeyPairSignerFromBytes(new Uint8Array(wallet));
-
-    const [ata] = await findAssociatedTokenPda({
-      mint,
-      owner: signer.address,
-      tokenProgram: TOKEN_PROGRAM_ADDRESS,
-    });
-    console.log(`Your ata is : ${ata}`);
-
-    // const createAtaIx =
-    // const mintToIx =
-
-    const { value: latestBlockhash } = await rpc.getLatestBlockhash().send();
-
-    const msg = createTransactionMessage({ version: 0 });
-
-    const msgWithPayer = setTransactionMessageFeePayerSigner(signer, msg);
-
-    const msgWithLiftime = setTransactionMessageLifetimeUsingBlockhash(
-      latestBlockhash,
-      msgWithPayer,
+    const keypairSigner = await createKeyPairSignerFromBytes(
+      new Uint8Array(wallet),
     );
 
-    // const txMessage = appendTransactionMessageInstructions(
-    //   [createAtaIx, mintToIx],
-    //   msgWithLiftime,
-    // );
+    // Your token account for this mint
+    const [ata] = await findAssociatedTokenPda({
+      mint,
+      owner: keypairSigner.address,
+      tokenProgram: TOKEN_PROGRAM_ADDRESS,
+    });
 
-    // const signedTx = await signTransactionMessageWithSigners(txMessage);
+    // 1. Create the token account (does nothing if it already exists)
+    const createAtaIx =
+      await getCreateAssociatedTokenIdempotentInstructionAsync({
+        payer: keypairSigner,
+        mint,
+        owner: keypairSigner.address,
+      });
 
-    // assertIsTransactionWithBlockhashLifetime(signedTx);
+    // 2. Mint tokens into it
+    const mintToIx = getMintToInstruction({
+      mint,
+      token: ata,
+      mintAuthority: keypairSigner,
+      amount: 100_000_000n, // 100 tokens at 6 decimals
+    });
 
-    // const signature = getSignatureFromTransaction(signedTx);
+    // Build, sign and send, same pattern as spl_init.ts
+    const { value: latestBlockhash } = await rpc.getLatestBlockhash().send();
 
-    // const sendAndConfirm = sendAndConfirmTransactionFactory({
-    //   rpc,
-    //   rpcSubscriptions,
-    // });
+    const message = createTransactionMessage({ version: 0 });
+    const withPayer = setTransactionMessageFeePayerSigner(
+      keypairSigner,
+      message,
+    );
+    const withLifetime = setTransactionMessageLifetimeUsingBlockhash(
+      latestBlockhash,
+      withPayer,
+    );
+    const withInstructions = appendTransactionMessageInstructions(
+      [createAtaIx, mintToIx],
+      withLifetime,
+    );
 
-    // await sendAndConfirm(signedTx, { commitment: "confirmed" });
+    const signedTx = await signTransactionMessageWithSigners(withInstructions);
+    assertIsTransactionWithBlockhashLifetime(signedTx);
 
-    // console.log(`mint txid: ${signature}`);
+    const sendAndConfirm = sendAndConfirmTransactionFactory({
+      rpc,
+      rpcSubscriptions,
+    });
+    await sendAndConfirm(signedTx, { commitment: "confirmed" });
+
+    console.log("Token account:", ata);
+    console.log("Signature:", getSignatureFromTransaction(signedTx));
+    console.log(`https://explorer.solana.com/address/${ata}?cluster=devnet`);
   } catch (error) {
     console.log(error);
   }
