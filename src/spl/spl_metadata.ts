@@ -1,3 +1,4 @@
+import { base58 } from "@metaplex-foundation/umi/serializers";
 import {
   createSignerFromKeypair,
   publicKey,
