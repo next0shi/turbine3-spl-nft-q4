@@ -26,15 +26,23 @@ umi.use(signerIdentity(signer));
 
 (async () => {
   try {
-    //chanege image path to your image path
-    const image = await readFile("file-path");
+    // 1. Upload the image
+    const imageBytes = await readFile("./next0shi.jpeg");
+    const imageFile = createGenericFile(imageBytes, "next0shi.jpeg", {
+      contentType: "image/jpeg",
+    });
+    const [imageUri] = await umi.uploader.upload([imageFile]);
+    console.log("Image URI:", imageUri);
 
-    //change the image name and mime type
-    // const file =
-
-    // const [myUri] =
-    // console.log("Your image URI: ", myUri);
+    // 2. Upload the metadata JSON that points to the image
+    const metadataUri = await umi.uploader.uploadJson({
+      name: "my path, my burden",
+      symbol: "mPmB",
+      description: "first on Solana devnet",
+      image: imageUri,
+    });
+    console.log("Metadata URI:", metadataUri);
   } catch (error) {
-    console.log(error);
+    console.log("Upload failed:", error);
   }
 })();
