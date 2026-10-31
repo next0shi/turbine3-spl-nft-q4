@@ -203,8 +203,8 @@ The script fetches the asset with `fetchAsset`, prints its current name and URI,
 - Update transaction: `4zkhrZMp78PvYqYwRvw4zXyBWvaZ6dMkmPpwadTXGq1MkMGxRovXB3DabnwEAAdQtih5FiWCXYKxJSSLQnDZGtdU`
 - Metaplex explorer: https://core.metaplex.com/explorer/AXwDvXi75pdpa15oESRFeoTPdqCCSzg9AdRyx9NPRSGV?env=devnet
 
-> Screenshot of the NFT after the update: `Screenshot from 2026-10-31 22-09-07.png`
 
+![NFT after the update](./Screenshot from 2026-10-31 22-09-07.png)
 ---
 
 ## Problems I Ran Into
