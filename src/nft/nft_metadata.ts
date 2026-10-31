@@ -28,7 +28,7 @@ umi.use(signerIdentity(signer));
       "https://gateway.irys.xyz/3DhLbz6x8CSNhkYTrgeyD9qWthqKjWj8VHPh1PpWCbkV";
 
     const metadata = {
-      name: "my path, my burden",
+      name: "my path, my burden, to be at peace",
       symbol: "mPmB",
       description: "first on Solana devnet",
       image,

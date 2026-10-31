@@ -27,7 +27,7 @@ umi.use(mplCore());
 
     // The new metadata URI from step 1 (or your current one)
     const newUri =
-      "https://gateway.irys.xyz/3oHrJVpunRamRRF7vk4LssF9ztzEp5Tie9kEYuxGYD25";
+      "https://gateway.irys.xyz/68oKMqZRtFwn1UUaaBt5Hm3uVTuC4ZkdqgRZc7bFmPkW";
 
     const asset = await fetchAsset(umi, assetAddress);
     console.log("Current name:", asset.name);
