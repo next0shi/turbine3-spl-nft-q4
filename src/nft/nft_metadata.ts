@@ -25,13 +25,17 @@ umi.use(signerIdentity(signer));
   try {
     //change the image uri to your image uri obtained from nft_image.ts
     const image =
-      "https://gateway.irys.xyz/5EDyiNrMWfhjdsEwXLrwkHPwZoZB2m1A2Kudrfxo1tpr";
+      "https://gateway.irys.xyz/3DhLbz6x8CSNhkYTrgeyD9qWthqKjWj8VHPh1PpWCbkV";
 
-    //json scheme : https://www.metaplex.com/docs/smart-contracts/core/json-schema
-    //change the metadata
-    // const metadata =
-    // const myUri =
-    // console.log(`metadata uri: ${myUri} `);
+    const metadata = {
+      name: "my path, my burden",
+      symbol: "mPmB",
+      description: "first on Solana devnet",
+      image,
+    };
+
+    const uri = await umi.uploader.uploadJson(metadata);
+    console.log("Metadata URI:", uri);
   } catch (error) {
     console.log("error", error);
   }
