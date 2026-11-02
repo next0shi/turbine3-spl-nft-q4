@@ -63,6 +63,8 @@ solana balance <WALLET_ADDRESS> --url devnet
 | `npm run nft:metadata` | `src/nft/nft_metadata.ts` | Uploads the NFT metadata JSON to Irys             |
 | `npm run nft:mint`     | `src/nft/nft_mint.ts`     | Mints the MPL Core NFT                            |
 | `npm run nft:update`   | `src/nft/nft_update.ts`   | Updates the NFT's name and metadata URI           |
+| `npm run nft:transfer` | `src/nft/nft_transfer.ts` | Transfers NFT ownership to another wallet         |
+| `npm run nft:burn`     | `src/nft/nft_burn.ts`     | Burns the NFT and reclaims the rent               |
 
 ---
 
@@ -206,6 +208,45 @@ The script fetches the asset with `fetchAsset`, prints its current name and URI,
 > Screenshot of the NFT after the update: `Screenshot from 2026-10-31 22-09-07.png`
 
 ---
+
+## Optional Task 4: Transfer the NFT Between Wallets
+
+```bash
+npm run nft:transfer
+```
+
+The script fetches the asset with `fetchAsset`, prints its current owner, then sends a `transfer` instruction signed by the current owner. MPL Core assets are single accounts with no token accounts, so the recipient does not need SOL or any setup to receive one.
+
+Only ownership moves. The **update authority** stays with my original wallet.
+
+- NFT asset address: `AXwDvXi75pdpa15oESRFeoTPdqCCSzg9AdRyx9NPRSGV`
+- New owner: `6wtWRkNJhg6yBfXoejxBoKj984GNv4GwqEUgTV4SHKTC`
+- Transaction: `XFYHi8VRwtpEjr8NUYWBG3LyaCa3cSL98dGuKSpPwAQJPchkGSuQT6v9rSzFXBFd3HYZg32CAsfcYtLGUCfeWCi`
+- Explorer: https://explorer.solana.com/tx/XFYHi8VRwtpEjr8NUYWBG3LyaCa3cSL98dGuKSpPwAQJPchkGSuQT6v9rSzFXBFd3HYZg32CAsfcYtLGUCfeWCi?cluster=devnet
+- Metaplex explorer: https://core.metaplex.com/explorer/AXwDvXi75pdpa15oESRFeoTPdqCCSzg9AdRyx9NPRSGV?env=devnet
+
+---
+
+## Optional Task 5: Burn the NFT and Reclaim the Rent
+
+```bash
+npm run nft:burn
+```
+
+The script fetches the asset, records my SOL balance, sends a `burn` instruction signed by the asset's owner, then records the balance again. Burning closes the asset account permanently, and the rent that was locked in it returns to my wallet. **This cannot be undone.**
+
+The owner must sign the burn. Because the NFT was transferred in Task 4, `6wtWRkNJhg6yBfXoejxBoKj984GNv4GwqEUgTV4SHKTC` ran this step.
+
+|                     | Lamports      |
+| ------------------- | ------------- |
+| Balance before burn | `46091279246` |
+| Balance after burn  | `46092173406` |
+
+- Burned asset: `AXwDvXi75pdpa15oESRFeoTPdqCCSzg9AdRyx9NPRSGV`
+- Transaction: `2N1MBQNybsomgZHtKF7qpSpMyw86oNrhz8E6kSU6v6ueSLbLNt89SfoHzYTNFLbhqaUe7foHyQggL2xeGpkwpJN6`
+- Explorer: https://explorer.solana.com/tx/2N1MBQNybsomgZHtKF7qpSpMyw86oNrhz8E6kSU6v6ueSLbLNt89SfoHzYTNFLbhqaUe7foHyQggL2xeGpkwpJN6?cluster=devnet
+
+After the burn, the asset address no longer resolves on the Metaplex explorer, which confirms the account is closed.
 
 ## Problems I Ran Into
 
